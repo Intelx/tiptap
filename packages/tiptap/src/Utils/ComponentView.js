@@ -116,6 +116,12 @@ export default class ComponentView {
   // prevent a full re-render of the vue component on update
   // we'll handle prop updates in `update()`
   ignoreMutation(mutation) {
+    
+    // Patch: Since prosemirror-view 1.9.13 the dom event handler will call
+    // ignoreMutation() to determine whether to update the selection in the
+    // editor. This causes custom nodes with no contentDOM (e.g. Formula)
+    // to become unselectable. This patch will allow selection events to go
+    // through even for leaf nodes.
     if (mutation.type === "selection") {
       return false;
     }
